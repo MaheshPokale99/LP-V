@@ -1,0 +1,16 @@
+Use Java 8 for this CORBA program.
+
+1. Generate CORBA files:
+   idlj -fall StringReverse.idl
+
+2. Compile:
+   javac *.java StringReverseModule/*.java
+
+3. Start naming service in one terminal:
+   orbd -ORBInitialPort 1050
+
+4. Start server in second terminal:
+   java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+
+5. Start client in third terminal:
+   java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost

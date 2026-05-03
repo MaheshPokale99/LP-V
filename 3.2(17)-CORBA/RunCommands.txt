@@ -1,0 +1,16 @@
+Use Java 8 for this CORBA program.
+
+1. Generate CORBA files:
+   idlj -fall Uppercase.idl
+
+2. Compile:
+   javac *.java UppercaseModule/*.java
+
+3. Start naming service in one terminal:
+   orbd -ORBInitialPort 1050
+
+4. Start server in second terminal:
+   java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+
+5. Start client in third terminal:
+   java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost

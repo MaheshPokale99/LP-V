@@ -1,0 +1,21 @@
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.net.MalformedURLException;
+import java.util.Scanner;
+
+public class Client {
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            CelsiusFahrenheit stub = (CelsiusFahrenheit) Naming.lookup("rmi://localhost:1099/CelsiusFahrenheitService");
+
+            System.out.print("Enter temperature in Celsius: ");
+            double celsius = sc.nextDouble();
+
+            double result = stub.convert(celsius);
+            System.out.println("Temperature in Fahrenheit: " + result);
+        } catch (MalformedURLException | NotBoundException | RemoteException e) {
+            System.err.println("Client exception: " + e.toString());
+        }
+    }
+}
