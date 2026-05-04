@@ -1,5 +1,10 @@
 Use Java 8 for this CORBA program.
 
+Before running, remove // comments from:
+StringReverseClient.java
+StringReverseServer.java
+StringReverseImpl.java
+
 1. Generate CORBA files:
    idlj -fall StringReverse.idl
 
@@ -14,3 +19,13 @@ Use Java 8 for this CORBA program.
 
 5. Start client in third terminal:
    java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+Input:
+Enter string: hello
+
+Client output:
+Reversed string: olleh
+
+Server output:
+String Reverse CORBA Server is ready.
+Client sent: hello

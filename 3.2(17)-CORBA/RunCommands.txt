@@ -1,5 +1,10 @@
 Use Java 8 for this CORBA program.
 
+Before running, remove // comments from:
+UppercaseClient.java
+UppercaseServer.java
+UppercaseImpl.java
+
 1. Generate CORBA files:
    idlj -fall Uppercase.idl
 
@@ -14,3 +19,13 @@ Use Java 8 for this CORBA program.
 
 5. Start client in third terminal:
    java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+Input:
+Enter string: hello
+
+Client output:
+Uppercase string: HELLO
+
+Server output:
+Uppercase CORBA Server is ready.
+Client sent: hello
