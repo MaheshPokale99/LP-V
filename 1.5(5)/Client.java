@@ -19,3 +19,13 @@ public class Client {
         }
     }
 }
+
+/*
+POWER RMI - CHECK/RUN/INPUT:
+1. Check setup: java -version, javac -version, and rmiregistry.
+2. Compile in this folder: javac *.java
+3. Start registry if needed: rmiregistry
+4. Run server: java Server
+5. Run client: java Client
+6. Input exponent value; output shows 2 raised to that exponent.
+*/

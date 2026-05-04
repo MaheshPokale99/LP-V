@@ -42,3 +42,71 @@ public class SimpleInterestServer {
         return values;
     }
 }
+
+/*
+7.2 CURRENT JDK 26 SERVER URL / POSTMAN:
+1. Compile: javac *.java
+2. Run this server: java SimpleInterestServer
+3. Server port: 7002
+4. Service path: /interest
+5. Show in browser/Postman GET:
+   http://localhost:7002/interest?principal=1000&rate=5&time=2
+6. Output returns simple interest.
+*/
+
+/*
+JAVA 8 SOAP WEB SERVICE VERSION - USE ONLY IF JAVA 8 IS AVAILABLE
+
+FILE 1: SimpleInterestService.java
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+
+@WebService
+public interface SimpleInterestService {
+    @WebMethod
+    double calculate(double principal, double rate, double time);
+}
+
+FILE 2: SimpleInterestServiceImpl.java
+import javax.jws.WebService;
+
+@WebService(endpointInterface = "SimpleInterestService")
+public class SimpleInterestServiceImpl implements SimpleInterestService {
+    public double calculate(double principal, double rate, double time) {
+        return (principal * rate * time) / 100;
+    }
+}
+
+FILE 3: Server.java
+import javax.xml.ws.Endpoint;
+
+public class Server {
+    public static void main(String[] args) {
+        Endpoint.publish("http://localhost:8081/interest", new SimpleInterestServiceImpl());
+        System.out.println("Simple Interest Web Service is running...");
+    }
+}
+
+FILE 4: Client.java
+import java.net.URL;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+
+public class Client {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("http://localhost:8081/interest?wsdl");
+        QName qname = new QName("http://", "SimpleInterestServiceImplService");
+        Service service = Service.create(url, qname);
+        SimpleInterestService si = service.getPort(SimpleInterestService.class);
+        System.out.println("Simple Interest: " + si.calculate(1000, 5, 2));
+    }
+}
+
+HOW TO RUN IN JAVA 8:
+1. Check Java 8: java -version and javac -version.
+2. Create the four files with the file names shown above.
+3. Compile: javac *.java
+4. Run server: java Server
+5. Open/check WSDL URL: http://localhost:8081/interest?wsdl
+6. Run client in another terminal: java Client
+*/

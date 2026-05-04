@@ -22,3 +22,13 @@ public class BullyElectionComplexity {
         }
     }
 }
+
+/*
+BULLY COMPLEXITY - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac BullyElectionComplexity.java
+3. Run: java BullyElectionComplexity
+4. Input number of processes only.
+5. No process IDs are needed in this program.
+6. Output shows message count and O(n^2) complexity.
+*/

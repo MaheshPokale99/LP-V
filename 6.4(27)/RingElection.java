@@ -60,3 +60,13 @@ public class RingElection {
         }
     }
 }
+
+/*
+RING ELECTION - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac RingElection.java
+3. Run: java RingElection
+4. Input number of processes, then process IDs in ring order.
+5. Input process ID that starts election.
+6. Output shows ring election messages and new coordinator.
+*/

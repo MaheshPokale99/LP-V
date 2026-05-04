@@ -24,3 +24,13 @@ public class StringReverseClient {
         }
     }
 }
+
+/*
+STRING REVERSE SOCKET - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run server first: java StringReverseServer
+4. Run client in another terminal: java StringReverseClient
+5. Input one string in client.
+6. Output shows the reversed string from server.
+*/

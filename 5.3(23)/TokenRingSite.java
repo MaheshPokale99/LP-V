@@ -65,3 +65,13 @@ public class TokenRingSite {
         System.out.println("Site " + site + " leaves critical section.");
     }
 }
+
+/*
+TOKEN RING SITE - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac TokenRingSite.java
+3. Run Site 1 first: java TokenRingSite 1
+4. Run Site 0 in another terminal: java TokenRingSite 0
+5. Input is command argument only: 0 for Site 0 or 1 for Site 1.
+6. Output shows token ring flow and critical section permission.
+*/

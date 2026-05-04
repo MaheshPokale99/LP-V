@@ -24,3 +24,13 @@ public class UppercaseClient {
         }
     }
 }
+
+/*
+UPPERCASE SOCKET - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run server first: java UppercaseServer
+4. Run client in another terminal: java UppercaseClient
+5. Input one string in client.
+6. Output shows uppercase string from server.
+*/

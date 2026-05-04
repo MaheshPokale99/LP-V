@@ -27,3 +27,14 @@ public class HelloUserClient {
         }
     }
 }
+
+/*
+7.3 HELLO USER WEB SERVICE - JDK 26 RUN/INPUT:
+1. Check: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run server first: java HelloUserServer
+4. Run client: java HelloUserClient
+5. Input user name.
+6. Browser/Postman test URL: http://localhost:7003/hello?name=Rahul
+7. Service runs on port 7003 and returns Hello User_Name.
+*/

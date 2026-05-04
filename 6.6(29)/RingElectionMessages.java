@@ -60,3 +60,13 @@ public class RingElectionMessages {
         }
     }
 }
+
+/*
+RING ELECTION MESSAGES - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac RingElectionMessages.java
+3. Run: java RingElectionMessages
+4. Input number of processes, then process IDs in ring.
+5. Input process ID that starts election.
+6. Output shows election token, coordinator messages, and leader.
+*/

@@ -64,3 +64,13 @@ public class TokenRingElection {
         }
     }
 }
+
+/*
+TOKEN RING ELECTION - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac TokenRingElection.java
+3. Run: java TokenRingElection
+4. Input number of processes, then all process IDs.
+5. Input process ID that starts election.
+6. Output shows token election path and new coordinator.
+*/

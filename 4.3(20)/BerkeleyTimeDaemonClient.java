@@ -29,3 +29,13 @@ public class BerkeleyTimeDaemonClient {
         }
     }
 }
+
+/*
+BERKELEY TIME DAEMON - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run daemon server first: java BerkeleyTimeDaemonServer
+4. Run two clients in separate terminals: java BerkeleyTimeDaemonClient
+5. No keyboard input is needed; machine time is sent automatically.
+6. Output shows average synchronized time and clock adjustment.
+*/

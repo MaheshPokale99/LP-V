@@ -26,3 +26,13 @@
 //         }
 //     }
 // }
+
+/*
+UPPERCASE CORBA - CHECK/RUN/INPUT:
+1. Use Java 8; check: java -version, javac -version, idlj, orbd.
+2. Generate files: idlj -fall Uppercase.idl
+3. Compile: javac *.java UppercaseModule/*.java
+4. Start: orbd -ORBInitialPort 1050
+5. Run server, then client using commands in RunCommands.txt.
+6. Input one string; output shows uppercase string.
+*/

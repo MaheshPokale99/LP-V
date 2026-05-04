@@ -96,3 +96,22 @@ public class MPIMultiplication {
     }
 }
 */
+
+/*
+MPI MULTIPLICATION - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile simulation in this folder: javac MPIMultiplication.java
+3. Run simulation: java MPIMultiplication
+4. Input number of processors.
+5. Then input that many integers, one by one.
+6. Output shows each process work and final multiplication at root.
+
+MPJ EXPRESS LIBRARY RUN COMMANDS:
+1. Install MPJ Express and set MPJ_HOME.
+2. Replace the simulation code above with the "Real MPI library code" block.
+3. Add MPJ jar while compiling:
+   javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
+4. Run with 4 MPI processes:
+   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
+5. On Linux/Mac use $MPJ_HOME/lib/mpj.jar and $MPJ_HOME/bin/mpjrun.sh.
+*/

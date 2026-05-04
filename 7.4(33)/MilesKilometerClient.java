@@ -25,3 +25,14 @@ public class MilesKilometerClient {
         }
     }
 }
+
+/*
+7.4 MILES TO KILOMETER WEB SERVICE - JDK 26 RUN/INPUT:
+1. Check: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run server first: java MilesKilometerServer
+4. Run client: java MilesKilometerClient
+5. Input miles value.
+6. Browser/Postman test URL: http://localhost:7004/convert?miles=10
+7. Service runs on port 7004 and returns kilometers.
+*/

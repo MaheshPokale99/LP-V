@@ -29,3 +29,13 @@ public class TimeDaemonClient {
         }
     }
 }
+
+/*
+TIME DAEMON SYNC - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run daemon server first: java TimeDaemonServer
+4. Run two clients in separate terminals: java TimeDaemonClient
+5. No keyboard input is needed; clients send local time automatically.
+6. Output shows synchronized daemon time and adjustment.
+*/

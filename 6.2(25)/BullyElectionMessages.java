@@ -44,3 +44,13 @@ public class BullyElectionMessages {
         }
     }
 }
+
+/*
+BULLY ELECTION MESSAGES - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac BullyElectionMessages.java
+3. Run: java BullyElectionMessages
+4. Input number of processes, then all process IDs.
+5. Input failed coordinator ID and process starting election.
+6. Output shows ELECTION, OK, COORDINATOR messages.
+*/

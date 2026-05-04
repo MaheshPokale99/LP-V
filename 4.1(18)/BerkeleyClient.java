@@ -27,3 +27,13 @@ public class BerkeleyClient {
         }
     }
 }
+
+/*
+BERKELEY TIME SYNC - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac *.java
+3. Run server first: java BerkeleyServer
+4. Run two clients in separate terminals: java BerkeleyClient
+5. No keyboard input is needed; clients send local time automatically.
+6. Output shows local time, synchronized time, and adjustment.
+*/

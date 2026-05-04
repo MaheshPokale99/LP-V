@@ -65,3 +65,13 @@ public class TokenRingMutexNode {
         System.out.println("Site " + site + " exits critical section.");
     }
 }
+
+/*
+TOKEN RING MUTEX - CHECK/RUN/INPUT:
+1. Check setup: java -version and javac -version.
+2. Compile in this folder: javac TokenRingMutexNode.java
+3. Run Site 1 first: java TokenRingMutexNode 1
+4. Run Site 0 in another terminal: java TokenRingMutexNode 0
+5. Input is command argument only: 0 for Site 0 or 1 for Site 1.
+6. Output shows mutual exclusion using the unique token.
+*/
