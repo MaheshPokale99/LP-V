@@ -31,11 +31,66 @@ public class BerkeleyTimeDaemonClient {
 }
 
 /*
-BERKELEY TIME DAEMON - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile in this folder: javac *.java
-3. Run daemon server first: java BerkeleyTimeDaemonServer
-4. Run two clients in separate terminals: java BerkeleyTimeDaemonClient
-5. No keyboard input is needed; machine time is sent automatically.
-6. Output shows average synchronized time and clock adjustment.
+BERKELEY CLOCK SYNCHRONIZATION - CHECK / RUN / INPUT / OUTPUT
+
+1. Check Java installation:
+   java -version
+   javac -version
+
+2. Go to folder:
+   cd path_to_your_folder
+
+3. Compile:
+   javac BerkeleyTimeDaemonServer.java
+   javac BerkeleyTimeDaemonClient.java
+
+4. Run server first:
+   java BerkeleyTimeDaemonServer
+
+5. Run clients in separate terminals:
+   java BerkeleyTimeDaemonClient
+   java BerkeleyTimeDaemonClient
+
+   (Optional: java BerkeleyTimeDaemonClient <server_ip>)
+
+--------------------------------------------------
+
+🔹 INPUT:
+- No manual input required
+- System time is taken automatically
+
+--------------------------------------------------
+
+🔹 OUTPUT:
+
+📌 Server Output:
+Berkeley Time Daemon Server started...
+Waiting for 2 machines...
+Machine 1 time: 1714821000000
+Machine 2 time: 1714821005000
+Daemon server time: 1714820998000
+Average synchronized time: 1714821001000
+
+--------------------------------------------------
+
+📌 Client Output (Example):
+
+Local machine time: 1714821000000
+Synchronized time from daemon: 1714821001000
+Clock adjustment: +1000
+
+--------------------------------------------------
+
+🔹 OBSERVATION:
+
+- Server collects time from all machines
+- Computes average time
+- Sends synchronized time to all clients
+- Each client adjusts its clock
+
+--------------------------------------------------
+
+🔹 CONCLUSION:
+
+Berkeley Algorithm synchronizes clocks by calculating average system time and adjusting each machine accordingly.
 */

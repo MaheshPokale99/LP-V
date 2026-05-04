@@ -67,11 +67,63 @@ public class TokenRingMutexNode {
 }
 
 /*
-TOKEN RING MUTEX - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile in this folder: javac TokenRingMutexNode.java
-3. Run Site 1 first: java TokenRingMutexNode 1
-4. Run Site 0 in another terminal: java TokenRingMutexNode 0
-5. Input is command argument only: 0 for Site 0 or 1 for Site 1.
-6. Output shows mutual exclusion using the unique token.
+1. Check Java installation:
+   java -version
+   javac -version
+
+2. Go to folder:
+   cd path_to_your_folder
+
+3. Compile:
+   javac TokenRingMutexNode.java
+
+4. Open TWO terminals
+
+5. Run Site 1 first:
+   java TokenRingMutexNode 1
+
+6. Run Site 0 in another terminal:
+   java TokenRingMutexNode 0
+
+--------------------------------------------------
+
+🔹 INPUT:
+- No manual input required
+- Argument:
+   0 → Site 0
+   1 → Site 1
+
+--------------------------------------------------
+
+🔹 OUTPUT:
+
+📌 Terminal 1 (Site 1)
+Site 1 waiting for token.
+Site 1 received TOKEN from Site 0.
+Site 1 enters critical section because it has token.
+Site 1 exits critical section.
+Site 1 sends token back to Site 0.
+
+--------------------------------------------------
+
+📌 Terminal 2 (Site 0)
+Site 0 owns unique token first.
+Site 0 enters critical section because it has token.
+Site 0 exits critical section.
+Site 0 sends token to Site 1.
+Site 0 received TOKEN from Site 1.
+
+--------------------------------------------------
+
+🔹 OBSERVATION:
+
+- Only one site enters critical section at a time
+- Token circulates between sites
+- No simultaneous access
+
+--------------------------------------------------
+
+🔹 CONCLUSION:
+
+Token Ring Mutual Exclusion ensures that only the process holding the unique token can enter the critical section, thus guaranteeing mutual exclusion.
 */

@@ -67,11 +67,65 @@ public class TokenRingSite {
 }
 
 /*
-TOKEN RING SITE - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile in this folder: javac TokenRingSite.java
-3. Run Site 1 first: java TokenRingSite 1
-4. Run Site 0 in another terminal: java TokenRingSite 0
-5. Input is command argument only: 0 for Site 0 or 1 for Site 1.
-6. Output shows token ring flow and critical section permission.
+1. Check Java installation:
+   java -version
+   javac -version
+
+2. Go to the folder where TokenRingSite.java is saved:
+   cd path_to_your_folder
+
+3. Compile the program:
+   javac TokenRingSite.java
+
+   👉 If no error → compilation successful
+
+4. Open TWO terminals (or two machines)
+
+5. Run Site 1 FIRST:
+   java TokenRingSite 1
+
+6. Run Site 0 in another terminal:
+   java TokenRingSite 0
+
+--------------------------------------------------
+
+🔹 INPUT:
+- No manual input required
+- Pass argument:
+   0 → Site 0
+   1 → Site 1
+
+--------------------------------------------------
+
+🔹 OUTPUT:
+
+📌 Terminal 1 (Site 1)
+Site 1 waits in token ring.
+Site 1 received TOKEN.
+Site 1 has unique token.
+Site 1 is allowed to enter critical section.
+Site 1 leaves critical section.
+Site 1 passes unique token to Site 0.
+
+--------------------------------------------------
+
+📌 Terminal 2 (Site 0)
+Site 0 starts token ring.
+Site 0 has unique token.
+Site 0 is allowed to enter critical section.
+Site 0 leaves critical section.
+Site 0 passes unique token to Site 1.
+Site 0 received TOKEN.
+
+--------------------------------------------------
+
+🔹 OBSERVATION:
+- Only one site enters critical section at a time
+- Token is passed sequentially between sites
+- Mutual exclusion is ensured using a unique token
+
+--------------------------------------------------
+
+🔹 CONCLUSION:
+Token Ring Algorithm ensures mutual exclusion because only the site holding the unique token can enter the critical section.
 */

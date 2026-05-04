@@ -72,11 +72,67 @@ public class TokenRingNode {
 }
 
 /*
-TOKEN RING NODE - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile in this folder: javac TokenRingNode.java
-3. Run Site 1 first: java TokenRingNode 1
-4. Run Site 0 in another terminal: java TokenRingNode 0
-5. Input is command argument only: 0 for Site 0 or 1 for Site 1.
-6. Output shows token passing and critical section entry.
+TOKEN RING NODE - CHECK / RUN / INPUT / OUTPUT:
+
+1. Check Java installation:
+   java -version
+   javac -version
+
+2. Go to the folder:
+   cd path_to_your_folder
+
+3. Compile:
+   javac TokenRingNode.java
+
+4. Open TWO terminals (or machines)
+
+5. Run Site 1 first:
+   java TokenRingNode 1
+
+6. Run Site 0 in another terminal:
+   java TokenRingNode 0
+
+--------------------------------------------------
+
+🔹 INPUT:
+- No manual input required
+- Argument:
+   0 → Site 0
+   1 → Site 1
+
+--------------------------------------------------
+
+🔹 OUTPUT:
+
+📌 Terminal 1 (Site 1)
+Site 1 waiting for token...
+Site 1 received TOKEN.
+Site 1 has token.
+Site 1 enters critical section.
+Site 1 exits critical section.
+Site 1 passed token to Site 0.
+
+--------------------------------------------------
+
+📌 Terminal 2 (Site 0)
+Site 0 started with unique token.
+Site 0 has token.
+Site 0 enters critical section.
+Site 0 exits critical section.
+Site 0 passed token to Site 1.
+Site 0 received TOKEN back from Site 1.
+
+--------------------------------------------------
+
+🔹 OBSERVATION:
+
+- Only one site enters critical section at a time
+- Token is passed in ring (0 → 1 → 0)
+- No simultaneous access occurs
+
+--------------------------------------------------
+
+🔹 CONCLUSION:
+
+Token Ring Mutual Exclusion ensures that only the node holding the unique token can enter the critical section, thereby guaranteeing mutual exclusion.
 */
