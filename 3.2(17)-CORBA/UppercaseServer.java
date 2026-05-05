@@ -39,18 +39,31 @@ public class UppercaseServer {
 /*
 UPPERCASE CORBA SERVER - CHECK/RUN:
 1. Use Java 8 because idlj, orbd, and CORBA APIs are available there.
-2. Remove // comments from UppercaseClient.java, UppercaseServer.java,
-   and UppercaseImpl.java before running.
+2. Remove the starting /* and ending */ block comment markers from
+   UppercaseClient.java, UppercaseServer.java, and UppercaseImpl.java.
 3. Generate stub/skeleton files:
    idlj -fall Uppercase.idl
-4. Compile:
-   javac *.java UppercaseModule/*.java
-5. Start naming service:
-   orbd -ORBInitialPort 1050
-6. Start this server:
-   java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+
+LINUX COMMANDS:
+javac *.java UppercaseModule/*.java
+orbd -ORBInitialPort 1050
+java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+WINDOWS COMMANDS:
+javac *.java UppercaseModule\*.java
+orbd -ORBInitialPort 1050
+java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
 
 EXPECTED SERVER OUTPUT:
 Uppercase CORBA Server is ready.
 Client sent: hello
+
+CLIENT COMMAND AND INPUT:
+java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+Enter string: hello
+
+CLIENT OUTPUT:
+Uppercase string: HELLO
 */

@@ -57,18 +57,23 @@ public class TokenRingElection {
         System.out.println("Processes in election: " + token);
         System.out.println("Process " + coordinator + " becomes COORDINATOR");
 
-        i = (index + 1) % n;
-        int current = coordinator;
+        int coordinatorIndex = -1;
+        for (int j = 0; j < n; j++) {
+            if (processes[j] == coordinator) {
+                coordinatorIndex = j;
+                break;
+            }
+        }
 
         System.out.println("\nCoordinator message passing:");
 
-        while (i != index) {
-            System.out.println("Process " + current +
-                    " sends COORDINATOR message to Process " + processes[i]);
-
-            current = processes[i];
-            i = (i + 1) % n;
-        }
+        int current = coordinatorIndex;
+        do {
+            int next = (current + 1) % n;
+            System.out.println("Process " + processes[current]
+                    + " sends COORDINATOR message to Process " + processes[next]);
+            current = next;
+        } while (current != coordinatorIndex);
 
         sc.close();
     }
@@ -123,7 +128,8 @@ Processes in election: [2, 4, 1, 3, 5]
 Process 5 becomes COORDINATOR
 
 Coordinator message passing:
-Process 5 sends COORDINATOR message to Process 4
+Process 5 sends COORDINATOR message to Process 2
+Process 2 sends COORDINATOR message to Process 4
 Process 4 sends COORDINATOR message to Process 1
 Process 1 sends COORDINATOR message to Process 3
 Process 3 sends COORDINATOR message to Process 5

@@ -125,11 +125,22 @@ MPI RECIPROCAL - CHECK/RUN/INPUT:
 MPJ EXPRESS LIBRARY RUN COMMANDS:
 1. Install MPJ Express and set MPJ_HOME.
 2. Replace the simulation code above with the "Real MPI library code" block.
-3. Add MPJ jar while compiling:
-   javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIReciprocal.java
-4. Run with 4 MPI processes:
-   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
-5. On Linux/Mac use $MPJ_HOME/lib/mpj.jar and $MPJ_HOME/bin/mpjrun.sh.
+
+LINUX COMMANDS:
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPIReciprocal.java
+mpjrun.sh -np 4 MPIReciprocal
+
+WINDOWS COMMANDS:
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIReciprocal.java
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
+
+SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
+Process 0 reciprocal: 1.0
+Process 1 reciprocal: 0.5
+Process 2 reciprocal: 0.3333333333333333
+Process 3 reciprocal: 0.25
+Resultant reciprocal array at root process:
+1.0 0.5 0.3333333333333333 0.25
 */
 
 
@@ -167,10 +178,24 @@ mpjrun.sh -help
 ====================================================
 
 # Compile (IMPORTANT: include mpj.jar)
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPIReciprocal.java
 
 # Run with 4 processes
-mpjrun.sh -np 4 MPIMultiplication
+mpjrun.sh -np 4 MPIReciprocal
+
+# Windows compile
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIReciprocal.java
+
+# Windows run with 4 processes
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
+
+# Sample output
+Process 0 reciprocal: 1.0
+Process 1 reciprocal: 0.5
+Process 2 reciprocal: 0.3333333333333333
+Process 3 reciprocal: 0.25
+Resultant reciprocal array at root process:
+1.0 0.5 0.3333333333333333 0.25
 
 ====================================================
 🔹 MPI CONCEPTS USED

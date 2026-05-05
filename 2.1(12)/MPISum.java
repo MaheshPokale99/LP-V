@@ -108,11 +108,21 @@ MPI SUM - CHECK/RUN/INPUT:
 MPJ EXPRESS LIBRARY RUN COMMANDS:
 1. Install MPJ Express and set MPJ_HOME.
 2. Replace the simulation code above with the "Real MPI library code" block.
-3. Add MPJ jar while compiling:
-   javac -cp "%MPJ_HOME%\lib\mpj.jar" MPISum.java
-4. Run with 4 MPI processes:
-   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
-5. On Linux/Mac use $MPJ_HOME/lib/mpj.jar and $MPJ_HOME/bin/mpjrun.sh.
+
+LINUX COMMANDS:
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
+mpjrun.sh -np 4 MPISum
+
+WINDOWS COMMANDS:
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPISum.java
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
+
+SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
+Process 0 intermediate sum: 1
+Process 1 intermediate sum: 2
+Process 2 intermediate sum: 3
+Process 3 intermediate sum: 4
+Final sum at root process: 10
 */
 
 
@@ -150,10 +160,23 @@ mpjrun.sh -help
 ====================================================
 
 # Compile (IMPORTANT: include mpj.jar)
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
 
 # Run with 4 processes
-mpjrun.sh -np 4 MPIMultiplication
+mpjrun.sh -np 4 MPISum
+
+# Windows compile
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPISum.java
+
+# Windows run with 4 processes
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
+
+# Sample output
+Process 0 intermediate sum: 1
+Process 1 intermediate sum: 2
+Process 2 intermediate sum: 3
+Process 3 intermediate sum: 4
+Final sum at root process: 10
 
 ====================================================
 🔹 MPI CONCEPTS USED

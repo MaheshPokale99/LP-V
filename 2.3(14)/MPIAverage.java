@@ -150,11 +150,23 @@ MPI AVERAGE - CHECK/RUN/INPUT:
 MPJ EXPRESS LIBRARY RUN COMMANDS:
 1. Install MPJ Express and set MPJ_HOME.
 2. Replace the simulation code above with the "Real MPI library code" block.
-3. Add MPJ jar while compiling:
-   javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIAverage.java
-4. Run with 4 MPI processes:
-   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIAverage
-5. On Linux/Mac use $MPJ_HOME/lib/mpj.jar and $MPJ_HOME/bin/mpjrun.sh.
+
+LINUX COMMANDS:
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPIAverage.java
+mpjrun.sh -np 4 MPIAverage
+
+WINDOWS COMMANDS:
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIAverage.java
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIAverage
+
+SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
+Random array at root process:
+14 31 44 41 47 7 48 39
+Process 0 local average: 22.5
+Process 1 local average: 42.5
+Process 2 local average: 27.0
+Process 3 local average: 43.5
+Final average at root process: 33.875
 */
 
 
@@ -192,10 +204,25 @@ mpjrun.sh -help
 ====================================================
 
 # Compile (IMPORTANT: include mpj.jar)
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPIAverage.java
 
 # Run with 4 processes
-mpjrun.sh -np 4 MPIMultiplication
+mpjrun.sh -np 4 MPIAverage
+
+# Windows compile
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIAverage.java
+
+# Windows run with 4 processes
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIAverage
+
+# Sample output
+Random array at root process:
+14 31 44 41 47 7 48 39
+Process 0 local average: 22.5
+Process 1 local average: 42.5
+Process 2 local average: 27.0
+Process 3 local average: 43.5
+Final average at root process: 33.875
 
 ====================================================
 🔹 MPI CONCEPTS USED

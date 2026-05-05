@@ -109,11 +109,21 @@ MPI MULTIPLICATION - CHECK/RUN/INPUT:
 MPJ EXPRESS LIBRARY RUN COMMANDS:
 1. Install MPJ Express and set MPJ_HOME.
 2. Replace the simulation code above with the "Real MPI library code" block.
-3. Add MPJ jar while compiling:
-   javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
-4. Run with 4 MPI processes:
-   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
-5. On Linux/Mac use $MPJ_HOME/lib/mpj.jar and $MPJ_HOME/bin/mpjrun.sh.
+
+LINUX COMMANDS:
+javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
+mpjrun.sh -np 4 MPIMultiplication
+
+WINDOWS COMMANDS:
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
+
+SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
+Process 0 intermediate multiplication: 1
+Process 1 intermediate multiplication: 2
+Process 2 intermediate multiplication: 3
+Process 3 intermediate multiplication: 4
+Final multiplication at root process: 24
 */
 
 /* 
@@ -154,6 +164,19 @@ javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
 
 # Run with 4 processes
 mpjrun.sh -np 4 MPIMultiplication
+
+# Windows compile
+javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
+
+# Windows run with 4 processes
+"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
+
+# Sample output
+Process 0 intermediate multiplication: 1
+Process 1 intermediate multiplication: 2
+Process 2 intermediate multiplication: 3
+Process 3 intermediate multiplication: 4
+Final multiplication at root process: 24
 
 ====================================================
 🔹 MPI CONCEPTS USED

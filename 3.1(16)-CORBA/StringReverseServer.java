@@ -40,18 +40,31 @@ public class StringReverseServer {
 /*
 STRING REVERSE CORBA SERVER - CHECK/RUN:
 1. Use Java 8 because idlj, orbd, and CORBA APIs are available there.
-2. Remove // comments from StringReverseClient.java, StringReverseServer.java,
-   and StringReverseImpl.java before running.
+2. Remove the starting /* and ending */ block comment markers from
+   StringReverseClient.java, StringReverseServer.java, and StringReverseImpl.java.
 3. Generate stub/skeleton files:
    idlj -fall StringReverse.idl
-4. Compile:
-   javac *.java StringReverseModule/*.java
-5. Start naming service:
-   orbd -ORBInitialPort 1050
-6. Start this server:
-   java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+
+LINUX COMMANDS:
+javac *.java StringReverseModule/*.java
+orbd -ORBInitialPort 1050
+java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+WINDOWS COMMANDS:
+javac *.java StringReverseModule\*.java
+orbd -ORBInitialPort 1050
+java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
 
 EXPECTED SERVER OUTPUT:
 String Reverse CORBA Server is ready.
 Client sent: hello
+
+CLIENT COMMAND AND INPUT:
+java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+Enter string: hello
+
+CLIENT OUTPUT:
+Reversed string: olleh
 */

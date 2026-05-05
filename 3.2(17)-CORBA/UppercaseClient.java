@@ -34,12 +34,22 @@ public class UppercaseClient {
 /*
 UPPERCASE CORBA - CHECK/RUN/INPUT:
 1. Use Java 8; check: java -version, javac -version, idlj, orbd.
-2. Remove // comments from all CORBA Java files before running.
-3. Generate files: idlj -fall Uppercase.idl
-4. Compile: javac *.java UppercaseModule/*.java
-5. Terminal 1: orbd -ORBInitialPort 1050
-6. Terminal 2: java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
-7. Terminal 3: java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+2. Remove the starting /* and ending */ block comment markers from
+   UppercaseClient.java, UppercaseServer.java, and UppercaseImpl.java.
+3. Generate files:
+   idlj -fall Uppercase.idl
+
+LINUX COMMANDS:
+javac *.java UppercaseModule/*.java
+orbd -ORBInitialPort 1050
+java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+WINDOWS COMMANDS:
+javac *.java UppercaseModule\*.java
+orbd -ORBInitialPort 1050
+java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
 
 INPUT:
 Enter string: hello

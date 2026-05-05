@@ -28,32 +28,50 @@ public class BullyElection {
 
         System.out.println("\nCoordinator " + failed + " failed.");
 
-        election(initiator);
+        if (!isActive(initiator)) {
+            System.out.println("Election cannot start because process " + initiator + " is not active.");
+        } else {
+            int coordinator = election(initiator);
+
+            System.out.println("\nProcess " + coordinator + " becomes COORDINATOR");
+            for (int p : processes) {
+                if (p != coordinator && p != failed) {
+                    System.out.println("Process " + coordinator + " sends COORDINATOR to " + p);
+                }
+            }
+
+            System.out.println("\nNew coordinator is process " + coordinator);
+        }
 
         sc.close();
     }
 
-    static void election(int initiator) {
+    static int election(int initiator) {
         System.out.println("\nProcess " + initiator + " starts election");
 
+        int highestResponder = -1;
         for (int p : processes) {
             if (p > initiator && p != failed) {
-
-                System.out.println("Election message from " + initiator + " to " + p);
-                System.out.println("OK message from " + p + " to " + initiator);
-
-                election(p);
-                return;
+                System.out.println("Process " + initiator + " sends ELECTION to " + p);
+                System.out.println("Process " + p + " sends OK to " + initiator);
+                highestResponder = p;
             }
         }
 
-        System.out.println("\nProcess " + initiator + " becomes COORDINATOR");
+        if (highestResponder == -1) {
+            return initiator;
+        }
 
+        return election(highestResponder);
+    }
+
+    static boolean isActive(int processId) {
         for (int p : processes) {
-            if (p != initiator && p != failed) {
-                System.out.println("Coordinator message from " + initiator + " to " + p);
+            if (p == processId) {
+                return p != failed;
             }
         }
+        return false;
     }
 }
 
@@ -110,10 +128,8 @@ Coordinator 5 failed.
 Process 2 starts election
 Process 2 sends ELECTION to 3
 Process 3 sends OK to 2
-
-Process 3 starts election
-Process 3 sends ELECTION to 4
-Process 4 sends OK to 3
+Process 2 sends ELECTION to 4
+Process 4 sends OK to 2
 
 Process 4 starts election
 
