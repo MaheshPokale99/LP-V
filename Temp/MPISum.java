@@ -4,22 +4,22 @@ public class MPISum {
 
     public static void main(String[] args) throws Exception {
 
-        // Initialize MPI environment
+        // Start MPI environment
         MPI.Init(args);
 
-        // Get process rank (process ID)
+        // Get process ID
         int rank = MPI.COMM_WORLD.Rank();
 
         // Get total number of processes
         int size = MPI.COMM_WORLD.Size();
 
-        // Root process ID
+        // Root process
         int root = 0;
 
-        // Array used for sending data
+        // Array for sending data
         int[] sendBuffer = new int[size];
 
-        // Array used for receiving one value
+        // Array for receiving one value
         int[] recvBuffer = new int[1];
 
         // Root process creates array
@@ -43,7 +43,7 @@ public class MPISum {
                 recvBuffer, 0, 1, MPI.INT, root
         );
 
-        // Each process gets one value
+        // Each process receives one value
         int localResult = recvBuffer[0];
 
         System.out.println(
@@ -66,7 +66,7 @@ public class MPISum {
                 MPI.SUM, root
         );
 
-        // Root prints final result
+        // Root process prints final result
         if (rank == root) {
 
             System.out.println(

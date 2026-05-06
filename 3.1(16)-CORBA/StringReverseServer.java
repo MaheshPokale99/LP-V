@@ -1,4 +1,3 @@
-/* 
 import StringReverseModule.StringReverse;
 import StringReverseModule.StringReverseHelper;
 import org.omg.CORBA.ORB;
@@ -29,42 +28,34 @@ public class StringReverseServer {
             System.out.println("String Reverse CORBA Server is ready.");
             orb.run();
         } catch (Exception e) {
-            System.out.println("Server exception: " + e.toString());
+            System.out.println("Server exception: " + e);
             e.printStackTrace();
         }
     }
 }
 
-*/
-
 /*
-STRING REVERSE CORBA SERVER - CHECK/RUN:
-1. Use Java 8 because idlj, orbd, and CORBA APIs are available there.
-2. Remove the starting /* and ending */ block comment markers from
-   StringReverseClient.java, StringReverseServer.java, and StringReverseImpl.java.
-3. Generate stub/skeleton files:
+STRING REVERSE CORBA SERVER
+
+Use Java 8 because idlj, orbd, and the old CORBA APIs are available there.
+
+Generate stubs:
    idlj -fall StringReverse.idl
 
-LINUX COMMANDS:
-javac *.java StringReverseModule/*.java
-orbd -ORBInitialPort 1050
-java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
-java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+Compile:
+   javac *.java StringReverseModule/*.java
 
-WINDOWS COMMANDS:
-javac *.java StringReverseModule\*.java
-orbd -ORBInitialPort 1050
-java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
-java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+Run order:
+1. Start naming service:
+   orbd -ORBInitialPort 1050
 
-EXPECTED SERVER OUTPUT:
-String Reverse CORBA Server is ready.
-Client sent: hello
+2. Start server:
+   java StringReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
 
-CLIENT COMMAND AND INPUT:
-java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
-Enter string: hello
+3. Start client:
+   java StringReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
 
-CLIENT OUTPUT:
-Reversed string: olleh
+Expected server output:
+   String Reverse CORBA Server is ready.
+   Client sent: hello
 */

@@ -1,4 +1,3 @@
-/* 
 import UppercaseModule.UppercasePOA;
 
 public class UppercaseImpl extends UppercasePOA {
@@ -9,18 +8,13 @@ public class UppercaseImpl extends UppercasePOA {
     }
 }
 
-*/
-
-
-
 /*
-UPPERCASE CORBA IMPLEMENTATION:
-1. This class contains the remote method logic.
-2. Client sends one string to changeToUppercase().
-3. Server prints the received string.
-4. Method returns the uppercase string to the client.
+UPPERCASE CORBA IMPLEMENTATION
 
-SAMPLE:
+The client sends one string to changeToUppercase().
+The server prints the received string.
+The method returns the uppercase string to the client.
+
 Input : hello
 Output: HELLO
 */

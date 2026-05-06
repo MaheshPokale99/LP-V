@@ -1,4 +1,3 @@
-/*
 import UppercaseModule.Uppercase;
 import UppercaseModule.UppercaseHelper;
 import org.omg.CORBA.ORB;
@@ -29,41 +28,34 @@ public class UppercaseServer {
             System.out.println("Uppercase CORBA Server is ready.");
             orb.run();
         } catch (Exception e) {
-            System.out.println("Server exception: " + e.toString());
+            System.out.println("Server exception: " + e);
             e.printStackTrace();
         }
     }
 }
-*/
 
 /*
-UPPERCASE CORBA SERVER - CHECK/RUN:
-1. Use Java 8 because idlj, orbd, and CORBA APIs are available there.
-2. Remove the starting /* and ending */ block comment markers from
-   UppercaseClient.java, UppercaseServer.java, and UppercaseImpl.java.
-3. Generate stub/skeleton files:
+UPPERCASE CORBA SERVER
+
+Use Java 8 because idlj, orbd, and the old CORBA APIs are available there.
+
+Generate stubs:
    idlj -fall Uppercase.idl
 
-LINUX COMMANDS:
-javac *.java UppercaseModule/*.java
-orbd -ORBInitialPort 1050
-java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
-java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+Compile:
+   javac *.java UppercaseModule/*.java
 
-WINDOWS COMMANDS:
-javac *.java UppercaseModule\*.java
-orbd -ORBInitialPort 1050
-java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
-java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+Run order:
+1. Start naming service:
+   orbd -ORBInitialPort 1050
 
-EXPECTED SERVER OUTPUT:
-Uppercase CORBA Server is ready.
-Client sent: hello
+2. Start server:
+   java UppercaseServer -ORBInitialPort 1050 -ORBInitialHost localhost
 
-CLIENT COMMAND AND INPUT:
-java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
-Enter string: hello
+3. Start client:
+   java UppercaseClient -ORBInitialPort 1050 -ORBInitialHost localhost
 
-CLIENT OUTPUT:
-Uppercase string: HELLO
+Expected server output:
+   Uppercase CORBA Server is ready.
+   Client sent: hello
 */

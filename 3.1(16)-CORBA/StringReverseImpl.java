@@ -1,4 +1,3 @@
-/* 
 import StringReverseModule.StringReversePOA;
 
 public class StringReverseImpl extends StringReversePOA {
@@ -9,16 +8,13 @@ public class StringReverseImpl extends StringReversePOA {
     }
 }
 
-*/
-
 /*
-STRING REVERSE CORBA IMPLEMENTATION:
-1. This class contains the remote method logic.
-2. Client sends one string to reverseString().
-3. Server prints the received string.
-4. Method returns the reversed string to the client.
+STRING REVERSE CORBA IMPLEMENTATION
 
-SAMPLE:
+The client sends one string to reverseString().
+The server prints the received string.
+The method returns the reversed string to the client.
+
 Input : hello
 Output: olleh
 */
