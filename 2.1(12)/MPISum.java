@@ -166,7 +166,8 @@ LINUX MPJ EXPRESS SETUP
    wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
    tar -xzf mpj-v0_44.tar.gz
 
-3. Set MPJ_HOME and PATH. MPJ_HOME is the folder where MPJ is installed:
+3. Set MPJ_HOME and PATH. If MPJ is installed somewhere else, change only
+   this path: $HOME/mpj-v0_44
    echo 'export MPJ_HOME=$HOME/mpj-v0_44' >> ~/.bashrc
    echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
    source ~/.bashrc
@@ -175,6 +176,7 @@ LINUX MPJ EXPRESS SETUP
    java -version
    javac -version
    echo $MPJ_HOME
+   ls "$MPJ_HOME/lib/mpj.jar"
    which mpjrun.sh
    mpjrun.sh -help
 
@@ -215,6 +217,11 @@ LINUX REAL MPI RUN
    javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
    mpjrun.sh -np 4 MPISum
 
+If your file is in another folder, cd to that folder first. Example:
+   cd ~/LP-V/TEMP
+   javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
+   mpjrun.sh -np 4 MPISum
+
 Command meaning:
 1. find . -name "MPISum.java" searches the file location.
 2. cd "2.1(12)" opens the practical folder.
@@ -223,47 +230,61 @@ Command meaning:
 5. MPISum in the run command is the class name, not the file name. Do not write
    MPISum.java in the mpjrun command.
 
-WINDOWS MPJ EXPRESS SETUP
+WINDOWS POWERSHELL MPJ EXPRESS SETUP
 1. Install JDK 8.
 2. Extract MPJ Express. Example installed path:
    C:\mpj-v0_44
-3. Set environment variable. MPJ_HOME must point to the MPJ folder:
-   MPJ_HOME=C:\mpj-v0_44
-4. Add to Path:
-   %MPJ_HOME%\bin
-5. Verify:
+3. In PowerShell, set MPJ_HOME for the current terminal. If MPJ is installed
+   somewhere else, change only this path:
+   $env:MPJ_HOME="C:\mpj-v0_44"
+4. Verify:
    java -version
    javac -version
-   echo %MPJ_HOME%
-   where mpjrun.bat
-   mpjrun.bat -help
+   echo $env:MPJ_HOME
+   ls "$env:MPJ_HOME\lib\mpj.jar"
+   where.exe mpjrun.bat
+   & "$env:MPJ_HOME\bin\mpjrun.bat" -help
 
 WINDOWS MPJ SERVER / DAEMON PATH NOTES
 1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
    needed:
-      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
+      & "$env:MPJ_HOME\bin\mpjrun.bat" -np 4 MPISum
 
 2. For multiple Windows machines, start the daemon on every machine:
-      "%MPJ_HOME%\bin\mpjdaemon.bat" -boot
+      & "$env:MPJ_HOME\bin\mpjdaemon.bat" -boot
 
 3. Run using niodev:
-      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 -dev niodev MPISum
+      & "$env:MPJ_HOME\bin\mpjrun.bat" -np 4 -dev niodev MPISum
 
 4. Stop the daemon on every machine:
-      "%MPJ_HOME%\bin\mpjdaemon.bat" -halt
+      & "$env:MPJ_HOME\bin\mpjdaemon.bat" -halt
 
 5. MPJ server port settings are in:
-      %MPJ_HOME%\conf\mpjexpress.conf
+      $env:MPJ_HOME\conf\mpjexpress.conf
 
-WINDOWS REAL MPI RUN
+WINDOWS POWERSHELL REAL MPI RUN
+   cd "D:\LP-V\2.1(12)"
+   $env:MPJ_HOME="C:\mpj-v0_44"
+   javac -cp ".;$env:MPJ_HOME\lib\mpj.jar" MPISum.java
+   & "$env:MPJ_HOME\bin\mpjrun.bat" -np 4 MPISum
+
+If your file is in another folder, cd to that folder first. Example:
+   cd "D:\LP-V\TEMP"
+   $env:MPJ_HOME="C:\mpj-v0_44"
+   javac -cp ".;$env:MPJ_HOME\lib\mpj.jar" MPISum.java
+   & "$env:MPJ_HOME\bin\mpjrun.bat" -np 4 MPISum
+
+Optional Windows CMD version:
    cd /d D:\LP-V\2.1(12)
+   set MPJ_HOME=C:\mpj-v0_44
    javac -cp ".;%MPJ_HOME%\lib\mpj.jar" MPISum.java
    "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
 
 Windows command meaning:
-1. cd /d opens the drive and folder together.
-2. javac compiles the file named MPISum.java.
-3. mpjrun.bat starts real MPI processes.
-4. -np 4 means run 4 MPI processes.
-5. MPISum is the public class name to run.
+1. cd opens the folder where MPISum.java is saved.
+2. $env:MPJ_HOME tells PowerShell where MPJ Express is installed.
+3. javac compiles the file named MPISum.java with mpj.jar.
+4. mpjrun.bat starts real MPI processes.
+5. -np 4 means run 4 MPI processes.
+6. MPISum is the public class name to run.
 */
