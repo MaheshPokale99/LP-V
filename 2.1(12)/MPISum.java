@@ -54,8 +54,64 @@ public class MPISum {
 }
 
 /*
-Real MPI library code using MPJ Express:
+PRACTICAL 2.1 - MPI INTERMEDIATE SUM
 
+This file keeps the Java thread simulation above for normal classroom running.
+The real MPI / MPJ Express version is kept below as a reference. To run real
+MPI, copy only the REAL MPI CODE block into MPISum.java, replacing the simulation
+code above.
+
+IMPORTANT FILE NAME RULE
+1. The public class name is MPISum.
+2. Java requires the file name to be exactly MPISum.java.
+3. Do not rename it to mpi.java, sum.java, MPISumMPI.java, or any other name.
+4. Compile and run from inside folder 2.1(12).
+
+HOW TO COPY THE REAL MPI CODE
+1. Open this file: MPISum.java.
+2. Keep a backup if needed.
+3. Select the code between:
+   ---------------- REAL MPI CODE START ----------------
+   and
+   ---------------- REAL MPI CODE END ----------------
+4. Copy that code.
+5. Replace the full simulation code at the top of this file with that copied
+   real MPI code.
+6. Save the file with the same name: MPISum.java.
+7. Run the compile and run commands given below.
+
+SIMULATION ALGORITHM
+1. User enters number of processors.
+2. User enters one value for each simulated processor.
+3. Root creates one worker thread per value.
+4. Each worker prints its intermediate sum.
+5. Root joins all workers and prints final sum.
+
+SIMULATION RUN
+Linux:
+   javac MPISum.java
+   java MPISum
+
+Windows:
+   javac MPISum.java
+   java MPISum
+
+Sample input:
+   4
+   1 2 3 4
+
+Expected output:
+   Final sum at root process: 10
+
+REAL MPI ALGORITHM
+1. MPI starts 4 real processes using mpjrun.
+2. Root process creates array 1 2 3 4.
+3. Scatter gives one value to each MPI process.
+4. Each process keeps its received value as local sum.
+5. Reduce with MPI.SUM adds all local sums at root.
+6. Root prints final sum.
+
+---------------- REAL MPI CODE START ----------------
 import mpi.*;
 
 public class MPISum {
@@ -64,148 +120,150 @@ public class MPISum {
 
         int rank = MPI.COMM_WORLD.Rank();
         int size = MPI.COMM_WORLD.Size();
+        int root = 0;
 
-        int[] sendBuffer = null;
+        int[] sendBuffer = new int[size];
         int[] recvBuffer = new int[1];
 
-        if (rank == 0) {
-            sendBuffer = new int[size];
+        if (rank == root) {
+            System.out.println("Root process created array:");
             for (int i = 0; i < size; i++) {
                 sendBuffer[i] = i + 1;
+                System.out.print(sendBuffer[i] + " ");
             }
+            System.out.println();
         }
 
         MPI.COMM_WORLD.Scatter(sendBuffer, 0, 1, MPI.INT,
-                recvBuffer, 0, 1, MPI.INT, 0);
+                recvBuffer, 0, 1, MPI.INT, root);
 
-        int localSum = recvBuffer[0];
-        System.out.println("Process " + rank + " intermediate sum: " + localSum);
+        int localResult = recvBuffer[0];
+        System.out.println("Process " + rank + " received " + recvBuffer[0]
+                + " and local sum is " + localResult);
 
-        int[] localSumBuffer = { localSum };
-        int[] result = new int[1];
+        int[] localBuffer = { localResult };
+        int[] finalResult = new int[1];
 
-        MPI.COMM_WORLD.Reduce(localSumBuffer, 0,
-                result, 0, 1, MPI.INT, MPI.SUM, 0);
+        MPI.COMM_WORLD.Reduce(localBuffer, 0,
+                finalResult, 0, 1, MPI.INT, MPI.SUM, root);
 
-        if (rank == 0) {
-            System.out.println("Final sum at root process: " + result[0]);
+        if (rank == root) {
+            System.out.println("Final sum at root process: " + finalResult[0]);
         }
 
         MPI.Finalize();
     }
 }
-*/
+---------------- REAL MPI CODE END ----------------
 
-/*
-MPI SUM - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile simulation in this folder: javac MPISum.java
-3. Run simulation: java MPISum
-4. Input number of processors.
-5. Then input that many integers, one by one.
-6. Output shows each process work and final sum at root.
+LINUX MPJ EXPRESS SETUP
+1. Install Java and tools:
+   sudo apt update
+   sudo apt install openjdk-8-jdk wget tar findutils -y
 
-MPJ EXPRESS LIBRARY RUN COMMANDS:
-1. Install MPJ Express and set MPJ_HOME.
-2. Replace the simulation code above with the "Real MPI library code" block.
+2. Download and extract MPJ Express:
+   cd ~
+   wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
+   tar -xzf mpj-v0_44.tar.gz
 
-LINUX COMMANDS:
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
-mpjrun.sh -np 4 MPISum
+3. Set MPJ_HOME and PATH. MPJ_HOME is the folder where MPJ is installed:
+   echo 'export MPJ_HOME=$HOME/mpj-v0_44' >> ~/.bashrc
+   echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
+   source ~/.bashrc
 
-WINDOWS COMMANDS:
-javac -cp "%MPJ_HOME%\lib\mpj.jar" MPISum.java
-"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
+4. Verify:
+   java -version
+   javac -version
+   echo $MPJ_HOME
+   which mpjrun.sh
+   mpjrun.sh -help
 
-SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
-Process 0 intermediate sum: 1
-Process 1 intermediate sum: 2
-Process 2 intermediate sum: 3
-Process 3 intermediate sum: 4
-Final sum at root process: 10
-*/
+MPJ SERVER / DAEMON PATH NOTES
+1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
+   needed:
+      mpjrun.sh -np 4 MPISum
 
+2. For two machines or a lab cluster, MPJ needs daemon/server setup.
+   Create a machines file in the practical folder:
+      nano machines
 
-/* 
+   Example machines file:
+      192.168.1.10
+      192.168.1.11
 
-====================================================
-🔹 SETUP STEPS (RUN IN TERMINAL - LINUX)
-====================================================
+3. Start MPJ daemons from Linux before cluster run:
+      mpjboot machines
 
-# Create working folder
-mkdir mpi-work
-cd mpi-work
+4. Run on cluster using niodev:
+      mpjrun.sh -np 4 -dev niodev MPISum
 
-# Install Java
-sudo apt update
-sudo apt install openjdk-8-jdk -y
+5. Stop MPJ daemons after run:
+      mpjhalt machines
 
-# Download MPJ Express
-wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
+6. MPJ server port settings are in:
+      $MPJ_HOME/conf/mpjexpress.conf
 
-# Extract MPJ
-tar -xvf mpj-v0_44.tar.gz
-mv mpj-v0_44 mpj
+   Important default ports:
+      mpjexpress.mpjdaemon.port.1=40055
+      mpjexpress.mpjdaemon.port.2=40052
+      mpjexpress.mpjrun.port.1=40002
 
-# Set environment variables
-echo 'export MPJ_HOME=$HOME/mpi-work/mpj' >> ~/.bashrc
-echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
+LINUX REAL MPI RUN
+   cd ~/LP-V
+   find . -name "MPISum.java"
+   cd "2.1(12)"
+   javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
+   mpjrun.sh -np 4 MPISum
 
-# Verify installation
-mpjrun.sh -help
+Command meaning:
+1. find . -name "MPISum.java" searches the file location.
+2. cd "2.1(12)" opens the practical folder.
+3. javac compiles MPISum.java with the MPJ library.
+4. mpjrun.sh -np 4 MPISum runs class MPISum with 4 real MPI processes.
+5. MPISum in the run command is the class name, not the file name. Do not write
+   MPISum.java in the mpjrun command.
 
-====================================================
-🔹 HOW TO RUN THIS PROGRAM
-====================================================
+WINDOWS MPJ EXPRESS SETUP
+1. Install JDK 8.
+2. Extract MPJ Express. Example installed path:
+   C:\mpj-v0_44
+3. Set environment variable. MPJ_HOME must point to the MPJ folder:
+   MPJ_HOME=C:\mpj-v0_44
+4. Add to Path:
+   %MPJ_HOME%\bin
+5. Verify:
+   java -version
+   javac -version
+   echo %MPJ_HOME%
+   where mpjrun.bat
+   mpjrun.bat -help
 
-# Compile (IMPORTANT: include mpj.jar)
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPISum.java
+WINDOWS MPJ SERVER / DAEMON PATH NOTES
+1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
+   needed:
+      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
 
-# Run with 4 processes
-mpjrun.sh -np 4 MPISum
+2. For multiple Windows machines, start the daemon on every machine:
+      "%MPJ_HOME%\bin\mpjdaemon.bat" -boot
 
-# Windows compile
-javac -cp "%MPJ_HOME%\lib\mpj.jar" MPISum.java
+3. Run using niodev:
+      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 -dev niodev MPISum
 
-# Windows run with 4 processes
-"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
+4. Stop the daemon on every machine:
+      "%MPJ_HOME%\bin\mpjdaemon.bat" -halt
 
-# Sample output
-Process 0 intermediate sum: 1
-Process 1 intermediate sum: 2
-Process 2 intermediate sum: 3
-Process 3 intermediate sum: 4
-Final sum at root process: 10
+5. MPJ server port settings are in:
+      %MPJ_HOME%\conf\mpjexpress.conf
 
-====================================================
-🔹 MPI CONCEPTS USED
-====================================================
+WINDOWS REAL MPI RUN
+   cd /d D:\LP-V\2.1(12)
+   javac -cp ".;%MPJ_HOME%\lib\mpj.jar" MPISum.java
+   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPISum
 
-rank → process ID (0,1,2,3)
-size → total processes
-
-Process 0 = ROOT
-Others = WORKERS
-
-Flow:
-1. Root creates data
-2. Scatter → distribute data
-3. Each process computes
-4. Reduce → combine result
-
-====================================================
-🔹 COMMON ERRORS
-====================================================
-
-Error: mpi package not found
-→ Fix: use -cp .:$MPJ_HOME/lib/mpj.jar
-
-Error: mpjrun.sh not found
-→ Fix: source ~/.bashrc
-
-Error: nothing runs
-→ Check: echo $MPJ_HOME
-
-====================================================
+Windows command meaning:
+1. cd /d opens the drive and folder together.
+2. javac compiles the file named MPISum.java.
+3. mpjrun.bat starts real MPI processes.
+4. -np 4 means run 4 MPI processes.
+5. MPISum is the public class name to run.
 */

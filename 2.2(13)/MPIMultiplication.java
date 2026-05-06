@@ -54,8 +54,65 @@ public class MPIMultiplication {
 }
 
 /*
-Real MPI library code using MPJ Express:
+PRACTICAL 2.2 - MPI INTERMEDIATE MULTIPLICATION
 
+This file keeps the Java thread simulation above for normal classroom running.
+The real MPI / MPJ Express version is kept below as a reference. To run real
+MPI, copy only the REAL MPI CODE block into MPIMultiplication.java, replacing
+the simulation code above.
+
+IMPORTANT FILE NAME RULE
+1. The public class name is MPIMultiplication.
+2. Java requires the file name to be exactly MPIMultiplication.java.
+3. Do not rename it to mpi.java, multiplication.java, MPIMul.java, or any other
+   name.
+4. Compile and run from inside folder 2.2(13).
+
+HOW TO COPY THE REAL MPI CODE
+1. Open this file: MPIMultiplication.java.
+2. Keep a backup if needed.
+3. Select the code between:
+   ---------------- REAL MPI CODE START ----------------
+   and
+   ---------------- REAL MPI CODE END ----------------
+4. Copy that code.
+5. Replace the full simulation code at the top of this file with that copied
+   real MPI code.
+6. Save the file with the same name: MPIMultiplication.java.
+7. Run the compile and run commands given below.
+
+SIMULATION ALGORITHM
+1. User enters number of processors.
+2. User enters one value for each simulated processor.
+3. Root creates one worker thread per value.
+4. Each worker prints its intermediate multiplication.
+5. Root joins all workers and prints final multiplication.
+
+SIMULATION RUN
+Linux:
+   javac MPIMultiplication.java
+   java MPIMultiplication
+
+Windows:
+   javac MPIMultiplication.java
+   java MPIMultiplication
+
+Sample input:
+   4
+   1 2 3 4
+
+Expected output:
+   Final multiplication at root process: 24
+
+REAL MPI ALGORITHM
+1. MPI starts 4 real processes using mpjrun.
+2. Root process creates array 1 2 3 4.
+3. Scatter gives one value to each MPI process.
+4. Each process keeps its received value as local multiplication.
+5. Reduce with MPI.PROD multiplies all local values at root.
+6. Root prints final multiplication.
+
+---------------- REAL MPI CODE START ----------------
 import mpi.*;
 
 public class MPIMultiplication {
@@ -64,148 +121,151 @@ public class MPIMultiplication {
 
         int rank = MPI.COMM_WORLD.Rank();
         int size = MPI.COMM_WORLD.Size();
+        int root = 0;
 
-        int[] sendBuffer = null;
+        int[] sendBuffer = new int[size];
         int[] recvBuffer = new int[1];
 
-        if (rank == 0) {
-            sendBuffer = new int[size];
+        if (rank == root) {
+            System.out.println("Root process created array:");
             for (int i = 0; i < size; i++) {
                 sendBuffer[i] = i + 1;
+                System.out.print(sendBuffer[i] + " ");
             }
+            System.out.println();
         }
 
         MPI.COMM_WORLD.Scatter(sendBuffer, 0, 1, MPI.INT,
-                recvBuffer, 0, 1, MPI.INT, 0);
+                recvBuffer, 0, 1, MPI.INT, root);
 
-        int localMultiplication = recvBuffer[0];
-        System.out.println("Process " + rank + " intermediate multiplication: "
-                + localMultiplication);
+        int localResult = recvBuffer[0];
+        System.out.println("Process " + rank + " received " + recvBuffer[0]
+                + " and local multiplication is " + localResult);
 
-        int[] localMultiplicationBuffer = { localMultiplication };
-        int[] result = new int[1];
+        int[] localBuffer = { localResult };
+        int[] finalResult = new int[1];
 
-        MPI.COMM_WORLD.Reduce(localMultiplicationBuffer, 0,
-                result, 0, 1, MPI.INT, MPI.PROD, 0);
+        MPI.COMM_WORLD.Reduce(localBuffer, 0,
+                finalResult, 0, 1, MPI.INT, MPI.PROD, root);
 
-        if (rank == 0) {
-            System.out.println("Final multiplication at root process: " + result[0]);
+        if (rank == root) {
+            System.out.println("Final multiplication at root process: " + finalResult[0]);
         }
 
         MPI.Finalize();
     }
 }
-*/
+---------------- REAL MPI CODE END ----------------
 
-/*
-MPI MULTIPLICATION - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile simulation in this folder: javac MPIMultiplication.java
-3. Run simulation: java MPIMultiplication
-4. Input number of processors.
-5. Then input that many integers, one by one.
-6. Output shows each process work and final multiplication at root.
+LINUX MPJ EXPRESS SETUP
+1. Install Java and tools:
+   sudo apt update
+   sudo apt install openjdk-8-jdk wget tar findutils -y
 
-MPJ EXPRESS LIBRARY RUN COMMANDS:
-1. Install MPJ Express and set MPJ_HOME.
-2. Replace the simulation code above with the "Real MPI library code" block.
+2. Download and extract MPJ Express:
+   cd ~
+   wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
+   tar -xzf mpj-v0_44.tar.gz
 
-LINUX COMMANDS:
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
-mpjrun.sh -np 4 MPIMultiplication
+3. Set MPJ_HOME and PATH. MPJ_HOME is the folder where MPJ is installed:
+   echo 'export MPJ_HOME=$HOME/mpj-v0_44' >> ~/.bashrc
+   echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
+   source ~/.bashrc
 
-WINDOWS COMMANDS:
-javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
-"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
+4. Verify:
+   java -version
+   javac -version
+   echo $MPJ_HOME
+   which mpjrun.sh
+   mpjrun.sh -help
 
-SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
-Process 0 intermediate multiplication: 1
-Process 1 intermediate multiplication: 2
-Process 2 intermediate multiplication: 3
-Process 3 intermediate multiplication: 4
-Final multiplication at root process: 24
-*/
+MPJ SERVER / DAEMON PATH NOTES
+1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
+   needed:
+      mpjrun.sh -np 4 MPIMultiplication
 
-/* 
+2. For two machines or a lab cluster, MPJ needs daemon/server setup.
+   Create a machines file in the practical folder:
+      nano machines
 
-====================================================
-🔹 SETUP STEPS (RUN IN TERMINAL - LINUX)
-====================================================
+   Example machines file:
+      192.168.1.10
+      192.168.1.11
 
-# Create working folder
-mkdir mpi-work
-cd mpi-work
+3. Start MPJ daemons from Linux before cluster run:
+      mpjboot machines
 
-# Install Java
-sudo apt update
-sudo apt install openjdk-8-jdk -y
+4. Run on cluster using niodev:
+      mpjrun.sh -np 4 -dev niodev MPIMultiplication
 
-# Download MPJ Express
-wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
+5. Stop MPJ daemons after run:
+      mpjhalt machines
 
-# Extract MPJ
-tar -xvf mpj-v0_44.tar.gz
-mv mpj-v0_44 mpj
+6. MPJ server port settings are in:
+      $MPJ_HOME/conf/mpjexpress.conf
 
-# Set environment variables
-echo 'export MPJ_HOME=$HOME/mpi-work/mpj' >> ~/.bashrc
-echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
+   Important default ports:
+      mpjexpress.mpjdaemon.port.1=40055
+      mpjexpress.mpjdaemon.port.2=40052
+      mpjexpress.mpjrun.port.1=40002
 
-# Verify installation
-mpjrun.sh -help
+LINUX REAL MPI RUN
+   cd ~/LP-V
+   find . -name "MPIMultiplication.java"
+   cd "2.2(13)"
+   javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
+   mpjrun.sh -np 4 MPIMultiplication
 
-====================================================
-🔹 HOW TO RUN THIS PROGRAM
-====================================================
+Command meaning:
+1. find . -name "MPIMultiplication.java" searches the file location.
+2. cd "2.2(13)" opens the practical folder.
+3. javac compiles MPIMultiplication.java with the MPJ library.
+4. mpjrun.sh -np 4 MPIMultiplication runs class MPIMultiplication with 4 real
+   MPI processes.
+5. MPIMultiplication in the run command is the class name, not the file name. Do
+   not write MPIMultiplication.java in the mpjrun command.
 
-# Compile (IMPORTANT: include mpj.jar)
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIMultiplication.java
+WINDOWS MPJ EXPRESS SETUP
+1. Install JDK 8.
+2. Extract MPJ Express. Example installed path:
+   C:\mpj-v0_44
+3. Set environment variable. MPJ_HOME must point to the MPJ folder:
+   MPJ_HOME=C:\mpj-v0_44
+4. Add to Path:
+   %MPJ_HOME%\bin
+5. Verify:
+   java -version
+   javac -version
+   echo %MPJ_HOME%
+   where mpjrun.bat
+   mpjrun.bat -help
 
-# Run with 4 processes
-mpjrun.sh -np 4 MPIMultiplication
+WINDOWS MPJ SERVER / DAEMON PATH NOTES
+1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
+   needed:
+      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
 
-# Windows compile
-javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
+2. For multiple Windows machines, start the daemon on every machine:
+      "%MPJ_HOME%\bin\mpjdaemon.bat" -boot
 
-# Windows run with 4 processes
-"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
+3. Run using niodev:
+      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 -dev niodev MPIMultiplication
 
-# Sample output
-Process 0 intermediate multiplication: 1
-Process 1 intermediate multiplication: 2
-Process 2 intermediate multiplication: 3
-Process 3 intermediate multiplication: 4
-Final multiplication at root process: 24
+4. Stop the daemon on every machine:
+      "%MPJ_HOME%\bin\mpjdaemon.bat" -halt
 
-====================================================
-🔹 MPI CONCEPTS USED
-====================================================
+5. MPJ server port settings are in:
+      %MPJ_HOME%\conf\mpjexpress.conf
 
-rank → process ID (0,1,2,3)
-size → total processes
+WINDOWS REAL MPI RUN
+   cd /d D:\LP-V\2.2(13)
+   javac -cp ".;%MPJ_HOME%\lib\mpj.jar" MPIMultiplication.java
+   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIMultiplication
 
-Process 0 = ROOT
-Others = WORKERS
-
-Flow:
-1. Root creates data
-2. Scatter → distribute data
-3. Each process computes
-4. Reduce → combine result
-
-====================================================
-🔹 COMMON ERRORS
-====================================================
-
-Error: mpi package not found
-→ Fix: use -cp .:$MPJ_HOME/lib/mpj.jar
-
-Error: mpjrun.sh not found
-→ Fix: source ~/.bashrc
-
-Error: nothing runs
-→ Check: echo $MPJ_HOME
-
-====================================================
+Windows command meaning:
+1. cd /d opens the drive and folder together.
+2. javac compiles the file named MPIMultiplication.java.
+3. mpjrun.bat starts real MPI processes.
+4. -np 4 means run 4 MPI processes.
+5. MPIMultiplication is the public class name to run.
 */

@@ -63,8 +63,65 @@ public class MPIReciprocal {
 }
 
 /*
-Real MPI library code using MPJ Express:
+PRACTICAL 2.4 - MPI RECIPROCAL
 
+This file keeps the Java thread simulation above for normal classroom running.
+The real MPI / MPJ Express version is kept below as a reference. To run real
+MPI, copy only the REAL MPI CODE block into MPIReciprocal.java, replacing the
+simulation code above.
+
+IMPORTANT FILE NAME RULE
+1. The public class name is MPIReciprocal.
+2. Java requires the file name to be exactly MPIReciprocal.java.
+3. Do not rename it to mpi.java, reciprocal.java, MPIRec.java, or any other name.
+4. Compile and run from inside folder 2.4(15).
+
+HOW TO COPY THE REAL MPI CODE
+1. Open this file: MPIReciprocal.java.
+2. Keep a backup if needed.
+3. Select the code between:
+   ---------------- REAL MPI CODE START ----------------
+   and
+   ---------------- REAL MPI CODE END ----------------
+4. Copy that code.
+5. Replace the full simulation code at the top of this file with that copied
+   real MPI code.
+6. Save the file with the same name: MPIReciprocal.java.
+7. Run the compile and run commands given below.
+
+SIMULATION ALGORITHM
+1. User enters number of processors.
+2. User enters one value for each simulated processor.
+3. Root creates one worker thread per value.
+4. Each worker computes reciprocal of its value.
+5. Root joins workers and prints the reciprocal array.
+
+SIMULATION RUN
+Linux:
+   javac MPIReciprocal.java
+   java MPIReciprocal
+
+Windows:
+   javac MPIReciprocal.java
+   java MPIReciprocal
+
+Sample input:
+   4
+   1 2 3 4
+
+Expected output:
+   Resultant reciprocal array at root process:
+   1.0 0.5 0.3333333333333333 0.25
+
+REAL MPI ALGORITHM
+1. MPI starts 4 real processes using mpjrun.
+2. Root process creates array 1.0 2.0 3.0 4.0.
+3. Scatter gives one value to each MPI process.
+4. Each process calculates reciprocal = 1 / received value.
+5. Gather collects all reciprocal values at root.
+6. Root prints the final reciprocal array.
+
+---------------- REAL MPI CODE START ----------------
 import mpi.*;
 
 public class MPIReciprocal {
@@ -73,36 +130,36 @@ public class MPIReciprocal {
 
         int rank = MPI.COMM_WORLD.Rank();
         int size = MPI.COMM_WORLD.Size();
+        int root = 0;
 
-        double[] sendBuffer = null;
+        double[] sendBuffer = new double[size];
         double[] recvBuffer = new double[1];
 
-        if (rank == 0) {
-            sendBuffer = new double[size];
+        if (rank == root) {
+            System.out.println("Root process created array:");
             for (int i = 0; i < size; i++) {
                 sendBuffer[i] = i + 1;
+                System.out.print(sendBuffer[i] + " ");
             }
+            System.out.println();
         }
 
         MPI.COMM_WORLD.Scatter(sendBuffer, 0, 1, MPI.DOUBLE,
-                recvBuffer, 0, 1, MPI.DOUBLE, 0);
+                recvBuffer, 0, 1, MPI.DOUBLE, root);
 
-        double reciprocal = 1 / recvBuffer[0];
-        System.out.println("Process " + rank + " reciprocal: " + reciprocal);
+        double localResult = 1.0 / recvBuffer[0];
+        System.out.println("Process " + rank + " received " + recvBuffer[0]
+                + " and reciprocal is " + localResult);
 
-        double[] result = null;
-        if (rank == 0) {
-            result = new double[size];
-        }
+        double[] localBuffer = { localResult };
+        double[] gatheredResults = new double[size];
 
-        double[] reciprocalBuffer = { reciprocal };
+        MPI.COMM_WORLD.Gather(localBuffer, 0, 1, MPI.DOUBLE,
+                gatheredResults, 0, 1, MPI.DOUBLE, root);
 
-        MPI.COMM_WORLD.Gather(reciprocalBuffer, 0, 1, MPI.DOUBLE,
-                result, 0, 1, MPI.DOUBLE, 0);
-
-        if (rank == 0) {
+        if (rank == root) {
             System.out.println("Resultant reciprocal array at root process:");
-            for (double value : result) {
+            for (double value : gatheredResults) {
                 System.out.print(value + " ");
             }
             System.out.println();
@@ -111,120 +168,117 @@ public class MPIReciprocal {
         MPI.Finalize();
     }
 }
-*/
+---------------- REAL MPI CODE END ----------------
 
-/*
-MPI RECIPROCAL - CHECK/RUN/INPUT:
-1. Check setup: java -version and javac -version.
-2. Compile simulation in this folder: javac MPIReciprocal.java
-3. Run simulation: java MPIReciprocal
-4. Input number of processors.
-5. Then input that many numbers; avoid 0 for valid reciprocal.
-6. Output shows reciprocal array at root process.
+LINUX MPJ EXPRESS SETUP
+1. Install Java and tools:
+   sudo apt update
+   sudo apt install openjdk-8-jdk wget tar findutils -y
 
-MPJ EXPRESS LIBRARY RUN COMMANDS:
-1. Install MPJ Express and set MPJ_HOME.
-2. Replace the simulation code above with the "Real MPI library code" block.
+2. Download and extract MPJ Express:
+   cd ~
+   wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
+   tar -xzf mpj-v0_44.tar.gz
 
-LINUX COMMANDS:
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIReciprocal.java
-mpjrun.sh -np 4 MPIReciprocal
+3. Set MPJ_HOME and PATH. MPJ_HOME is the folder where MPJ is installed:
+   echo 'export MPJ_HOME=$HOME/mpj-v0_44' >> ~/.bashrc
+   echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
+   source ~/.bashrc
 
-WINDOWS COMMANDS:
-javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIReciprocal.java
-"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
+4. Verify:
+   java -version
+   javac -version
+   echo $MPJ_HOME
+   which mpjrun.sh
+   mpjrun.sh -help
 
-SAMPLE MPJ OUTPUT FOR 4 PROCESSES:
-Process 0 reciprocal: 1.0
-Process 1 reciprocal: 0.5
-Process 2 reciprocal: 0.3333333333333333
-Process 3 reciprocal: 0.25
-Resultant reciprocal array at root process:
-1.0 0.5 0.3333333333333333 0.25
-*/
+MPJ SERVER / DAEMON PATH NOTES
+1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
+   needed:
+      mpjrun.sh -np 4 MPIReciprocal
 
+2. For two machines or a lab cluster, MPJ needs daemon/server setup.
+   Create a machines file in the practical folder:
+      nano machines
 
-/* 
+   Example machines file:
+      192.168.1.10
+      192.168.1.11
 
-====================================================
-🔹 SETUP STEPS (RUN IN TERMINAL - LINUX)
-====================================================
+3. Start MPJ daemons from Linux before cluster run:
+      mpjboot machines
 
-# Create working folder
-mkdir mpi-work
-cd mpi-work
+4. Run on cluster using niodev:
+      mpjrun.sh -np 4 -dev niodev MPIReciprocal
 
-# Install Java
-sudo apt update
-sudo apt install openjdk-8-jdk -y
+5. Stop MPJ daemons after run:
+      mpjhalt machines
 
-# Download MPJ Express
-wget https://downloads.sourceforge.net/project/mpjexpress/mpj-v0_44.tar.gz
+6. MPJ server port settings are in:
+      $MPJ_HOME/conf/mpjexpress.conf
 
-# Extract MPJ
-tar -xvf mpj-v0_44.tar.gz
-mv mpj-v0_44 mpj
+   Important default ports:
+      mpjexpress.mpjdaemon.port.1=40055
+      mpjexpress.mpjdaemon.port.2=40052
+      mpjexpress.mpjrun.port.1=40002
 
-# Set environment variables
-echo 'export MPJ_HOME=$HOME/mpi-work/mpj' >> ~/.bashrc
-echo 'export PATH=$MPJ_HOME/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
+LINUX REAL MPI RUN
+   cd ~/LP-V
+   find . -name "MPIReciprocal.java"
+   cd "2.4(15)"
+   javac -cp .:$MPJ_HOME/lib/mpj.jar MPIReciprocal.java
+   mpjrun.sh -np 4 MPIReciprocal
 
-# Verify installation
-mpjrun.sh -help
+Command meaning:
+1. find . -name "MPIReciprocal.java" searches the file location.
+2. cd "2.4(15)" opens the practical folder.
+3. javac compiles MPIReciprocal.java with the MPJ library.
+4. mpjrun.sh -np 4 MPIReciprocal runs class MPIReciprocal with 4 real MPI
+   processes.
+5. MPIReciprocal in the run command is the class name, not the file name. Do not
+   write MPIReciprocal.java in the mpjrun command.
 
-====================================================
-🔹 HOW TO RUN THIS PROGRAM
-====================================================
+WINDOWS MPJ EXPRESS SETUP
+1. Install JDK 8.
+2. Extract MPJ Express. Example installed path:
+   C:\mpj-v0_44
+3. Set environment variable. MPJ_HOME must point to the MPJ folder:
+   MPJ_HOME=C:\mpj-v0_44
+4. Add to Path:
+   %MPJ_HOME%\bin
+5. Verify:
+   java -version
+   javac -version
+   echo %MPJ_HOME%
+   where mpjrun.bat
+   mpjrun.bat -help
 
-# Compile (IMPORTANT: include mpj.jar)
-javac -cp .:$MPJ_HOME/lib/mpj.jar MPIReciprocal.java
+WINDOWS MPJ SERVER / DAEMON PATH NOTES
+1. For one laptop or one desktop, use multicore mode. No MPJ server/daemon is
+   needed:
+      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
 
-# Run with 4 processes
-mpjrun.sh -np 4 MPIReciprocal
+2. For multiple Windows machines, start the daemon on every machine:
+      "%MPJ_HOME%\bin\mpjdaemon.bat" -boot
 
-# Windows compile
-javac -cp "%MPJ_HOME%\lib\mpj.jar" MPIReciprocal.java
+3. Run using niodev:
+      "%MPJ_HOME%\bin\mpjrun.bat" -np 4 -dev niodev MPIReciprocal
 
-# Windows run with 4 processes
-"%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
+4. Stop the daemon on every machine:
+      "%MPJ_HOME%\bin\mpjdaemon.bat" -halt
 
-# Sample output
-Process 0 reciprocal: 1.0
-Process 1 reciprocal: 0.5
-Process 2 reciprocal: 0.3333333333333333
-Process 3 reciprocal: 0.25
-Resultant reciprocal array at root process:
-1.0 0.5 0.3333333333333333 0.25
+5. MPJ server port settings are in:
+      %MPJ_HOME%\conf\mpjexpress.conf
 
-====================================================
-🔹 MPI CONCEPTS USED
-====================================================
+WINDOWS REAL MPI RUN
+   cd /d D:\LP-V\2.4(15)
+   javac -cp ".;%MPJ_HOME%\lib\mpj.jar" MPIReciprocal.java
+   "%MPJ_HOME%\bin\mpjrun.bat" -np 4 MPIReciprocal
 
-rank → process ID (0,1,2,3)
-size → total processes
-
-Process 0 = ROOT
-Others = WORKERS
-
-Flow:
-1. Root creates data
-2. Scatter → distribute data
-3. Each process computes
-4. Reduce → combine result
-
-====================================================
-🔹 COMMON ERRORS
-====================================================
-
-Error: mpi package not found
-→ Fix: use -cp .:$MPJ_HOME/lib/mpj.jar
-
-Error: mpjrun.sh not found
-→ Fix: source ~/.bashrc
-
-Error: nothing runs
-→ Check: echo $MPJ_HOME
-
-====================================================
+Windows command meaning:
+1. cd /d opens the drive and folder together.
+2. javac compiles the file named MPIReciprocal.java.
+3. mpjrun.bat starts real MPI processes.
+4. -np 4 means run 4 MPI processes.
+5. MPIReciprocal is the public class name to run.
 */
